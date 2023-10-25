@@ -47,20 +47,20 @@ namespace Trees
             _root = null;
         }
 
-        public bool AddNode(BinaryTreeNode<T> node,ChildType type)
+        public bool AddNode(BinaryTreeNode<T> node)
         {
             if ( node==null || node.Parent==null || !_nodes.Contains(node.Parent))
             {
                 return false;
             }
-            else if (node.Parent.IfHasChild(node,type))
+            else if (node.Parent.IfHasChild(node))
             {
                 return false;
             }
             else
             {
                 _nodes.Add(node);
-                return node.Parent.SetChild(node,type);
+                return node.Parent.SetChild(node);
             }
         }
 
@@ -122,26 +122,20 @@ namespace Trees
                 builder.Append("null");
             }
 
-            builder.Append(" Nodes: ");
+            builder.Append("\nNodes: \n");
 
             for (int i = 0; i < _nodes.Count; ++i)
             {
-                _nodes[i].ToString();
+                builder.Append(_nodes[i].ToString());
                 if (i<_nodes.Count-1)
                 {
-                    builder.Append(" , ");
+                    builder.Append("\n");
                 }
             }
             return builder.ToString();
         }
-
-        #endregion
         
-        #region Traversal
-
-        #region Depth-First
-
-        static void PreOrderTraversal(BinaryTreeNode<T> node,StringBuilder builder)
+        public static void PreOrderTraversal(BinaryTreeNode<T> node,StringBuilder builder)
         {
             if (node == null || builder==null)
             {
@@ -160,7 +154,7 @@ namespace Trees
             }
         }
 
-        static void InOrderTraversal(BinaryTreeNode<T> node,StringBuilder builder)
+        public static void InOrderTraversal(BinaryTreeNode<T> node,StringBuilder builder)
         {
             if (node == null || builder==null)
             {
@@ -169,16 +163,16 @@ namespace Trees
             
             if (node.LeftChild != null)
             {
-                PreOrderTraversal(node.LeftChild,builder);
+                InOrderTraversal(node.LeftChild,builder);
             }
             builder.Append($"{node.Value} ");
             if (node.RightChild != null)
             {
-                PreOrderTraversal(node.RightChild,builder);
+                InOrderTraversal(node.RightChild,builder);
             }
         }
 
-        static void PostOrderTraversal(BinaryTreeNode<T> node, StringBuilder builder)
+        public static void PostOrderTraversal(BinaryTreeNode<T> node, StringBuilder builder)
         {
             if (node == null || builder == null)
             {
@@ -187,30 +181,26 @@ namespace Trees
 
             if (node.LeftChild != null)
             {
-                PreOrderTraversal(node.LeftChild, builder);
+                PostOrderTraversal(node.LeftChild, builder);
             }
 
             if (node.RightChild != null)
             {
-                PreOrderTraversal(node.RightChild, builder);
+                PostOrderTraversal(node.RightChild, builder);
             }
 
             builder.Append($"{node.Value} ");
         }
 
-        #endregion
-
-        #region Breadth-First
-
-        static void BreadthFirstTraversal(BinaryTreeNode<T> root,StringBuilder builder)
+        public static void BreadthFirstTraversal(BinaryTreeNode<T> root,StringBuilder builder)
         {
-            if (root == null)
+            if (root == null || builder==null)
             {
                 return;
             }
 
             Queue<BinaryTreeNode<T>> searchList = new Queue<BinaryTreeNode<T>>();
-            searchList.Append(root);
+            searchList.Enqueue(root);
 
             while (searchList.Count>0)
             {
@@ -220,16 +210,14 @@ namespace Trees
 
                 if (node.LeftChild!=null)
                 {
-                    searchList.Append(node.LeftChild);
+                    searchList.Enqueue(node.LeftChild);
                 }
                 if (node.RightChild!=null)
                 {
-                    searchList.Append(node.RightChild);
+                    searchList.Enqueue(node.RightChild);
                 }
             }
         }
-
-        #endregion
 
         #endregion
     }

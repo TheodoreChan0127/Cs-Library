@@ -26,7 +26,10 @@ namespace Trees
             _value = value;
             _parent = parent;
             _type = type;
-            parent.SetChild(this, type);
+            if (parent!=null)
+            {
+                parent.SetChild(this);
+            }
             
             rightChild = null;
             leftChild = null;
@@ -53,7 +56,7 @@ namespace Trees
 
         #region Methods
 
-        public bool SetChild(BinaryTreeNode<T> child,ChildType type)
+        public bool SetChild(BinaryTreeNode<T> child)
         {
             if (leftChild==child || rightChild==child || this == child)
             {
@@ -61,7 +64,7 @@ namespace Trees
             }
             else if(child.Parent == this)
             {
-                if (type==ChildType.Left)
+                if (child.Type==ChildType.Left)
                 {
                     leftChild = child;
                     return true;
@@ -114,9 +117,9 @@ namespace Trees
             return true;
         }
 
-        public bool IfHasChild(BinaryTreeNode<T> node,ChildType type)
+        public bool IfHasChild(BinaryTreeNode<T> node)
         {
-            BinaryTreeNode<T> child = type == ChildType.Left ? leftChild : rightChild;
+            BinaryTreeNode<T> child = node.Type == ChildType.Left ? leftChild : rightChild;
             if (child == null)
             {
                 return true;
@@ -139,9 +142,27 @@ namespace Trees
             {
                 nodeString.Append("null");
             }
-
-            nodeString.Append($" LeftChildren: {leftChild.Value} RightChild: {rightChild.Value}]");
-
+            
+            nodeString.Append(" LeftChild: ");
+            if (leftChild!=null)
+            {
+                nodeString.Append(leftChild.Value);
+            }
+            else
+            {
+                nodeString.Append("Null");
+            }
+            
+            nodeString.Append(" RightChild: ");
+            if (rightChild!=null)
+            {
+                nodeString.Append($"{rightChild.Value}]");
+            }
+            else
+            {
+                nodeString.Append("Null]");
+            }
+            
             return nodeString.ToString();
         }
 
