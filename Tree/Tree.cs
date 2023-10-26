@@ -1,11 +1,11 @@
-﻿using System.Text;
+using System.Text;
 
 namespace Trees
 {
     public class Tree<T>
     {
         #region Fields
-
+        
         private TreeNode<T> _root = null;
         private List<TreeNode<T>> _nodes = new List<TreeNode<T>>();
 

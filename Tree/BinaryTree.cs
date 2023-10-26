@@ -1,13 +1,15 @@
-﻿using System.Text;
+﻿using System.Collections;
+using System.Text;
 
 namespace Trees
 {
-    public class BinaryTree<T>
+    public class BinaryTree<T>:IEnumerable
     {
         #region Fields
 
         private BinaryTreeNode<T> _root = null;
         private List<BinaryTreeNode<T>> _nodes = new List<BinaryTreeNode<T>>();
+        private List<BinaryTreeNode<T>> _traversal = new List<BinaryTreeNode<T>>();
 
         #endregion
 
@@ -135,66 +137,67 @@ namespace Trees
             return builder.ToString();
         }
         
-        public static void PreOrderTraversal(BinaryTreeNode<T> node,StringBuilder builder)
+        public static void PreOrderTraversal(BinaryTreeNode<T> node, List<BinaryTreeNode<T>> traversal)
         {
-            if (node == null || builder==null)
+            if (node == null || traversal==null)
             {
                 return;
             }
 
-            builder.Append($"{node.Value} ");
+            traversal.Add(node);
+            
             if (node.LeftChild != null)
             {
-                PreOrderTraversal(node.LeftChild,builder);
+                PreOrderTraversal(node.LeftChild,traversal);
             }
 
             if (node.RightChild != null)
             {
-                PreOrderTraversal(node.RightChild,builder);
+                PreOrderTraversal(node.RightChild,traversal);
             }
         }
 
-        public static void InOrderTraversal(BinaryTreeNode<T> node,StringBuilder builder)
+        public static void InOrderTraversal(BinaryTreeNode<T> node,List<BinaryTreeNode<T>> traversal)
         {
-            if (node == null || builder==null)
+            if (node == null || traversal==null)
             {
                 return;
             }
             
             if (node.LeftChild != null)
             {
-                InOrderTraversal(node.LeftChild,builder);
+                InOrderTraversal(node.LeftChild,traversal);
             }
-            builder.Append($"{node.Value} ");
+            traversal.Add(node);
             if (node.RightChild != null)
             {
-                InOrderTraversal(node.RightChild,builder);
+                InOrderTraversal(node.RightChild,traversal);
             }
         }
 
-        public static void PostOrderTraversal(BinaryTreeNode<T> node, StringBuilder builder)
+        public static void PostOrderTraversal(BinaryTreeNode<T> node, List<BinaryTreeNode<T>> traversal)
         {
-            if (node == null || builder == null)
+            if (node == null || traversal == null)
             {
                 return;
             }
 
             if (node.LeftChild != null)
             {
-                PostOrderTraversal(node.LeftChild, builder);
+                PostOrderTraversal(node.LeftChild, traversal);
             }
 
             if (node.RightChild != null)
             {
-                PostOrderTraversal(node.RightChild, builder);
+                PostOrderTraversal(node.RightChild, traversal);
             }
 
-            builder.Append($"{node.Value} ");
+            traversal.Add(node);
         }
 
-        public static void BreadthFirstTraversal(BinaryTreeNode<T> root,StringBuilder builder)
+        public static void BreadthFirstTraversal(BinaryTreeNode<T> root, List<BinaryTreeNode<T>> traversal)
         {
-            if (root == null || builder==null)
+            if (root == null || traversal==null)
             {
                 return;
             }
@@ -206,7 +209,7 @@ namespace Trees
             {
                 BinaryTreeNode<T> node = searchList.First();
                 searchList.Dequeue();
-                builder.Append($"{node.Value} ");
+                traversal.Add(node);
 
                 if (node.LeftChild!=null)
                 {
@@ -219,7 +222,47 @@ namespace Trees
             }
         }
 
+        public IEnumerator GetEnumerator() => new BinaryTreeEnumerator<T>(_traversal);
+
         #endregion
+    }
+
+    public class BinaryTreeEnumerator<T> : IEnumerator
+    {
+        private List<BinaryTreeNode<T>> _traversal;
+        private int position = 1;
+
+        public BinaryTreeEnumerator(List<BinaryTreeNode<T>> traversal)
+        {
+            _traversal = traversal;
+        }
+
+        public object Current
+        {
+            get
+            {
+                try
+                {
+                    return _traversal[position];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    throw new InvalidOperationException();
+                }
+            }
+        }
+
+        public bool MoveNext()
+        {
+            ++position;
+            return position < _traversal.Count;
+        }
+
+        public void Reset()
+        {
+            position = -1;
+        }
+
     }
 }
 
