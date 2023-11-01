@@ -29,6 +29,8 @@ namespace Trees
 
         public BinaryTreeNode<T> Root => _root;
 
+        public List<BinaryTreeNode<T>> Traversal => _traversal;
+        
         #endregion
 
         #region Methods
@@ -107,6 +109,17 @@ namespace Trees
                 }
             }
             return null;
+        }
+
+        public void ClearTraversalList()
+        {
+            if (_traversal.Count>0)
+            {
+                for (int i = _traversal.Count-1; i >= 0; --i)
+                {
+                    _traversal.RemoveAt(i);
+                }
+            }
         }
         
         public override string ToString()
@@ -230,7 +243,7 @@ namespace Trees
     public class BinaryTreeEnumerator<T> : IEnumerator
     {
         private List<BinaryTreeNode<T>> _traversal;
-        private int position = 1;
+        private int position = -1;
 
         public BinaryTreeEnumerator(List<BinaryTreeNode<T>> traversal)
         {

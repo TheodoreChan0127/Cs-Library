@@ -1,24 +1,27 @@
-﻿using System.Text;
+﻿
+using System.Text;
+using Trees;
 
-namespace Trees
+namespace MinimaxSearch
 {
-    public class TreeNode<T>
+    public class MinimaxTreeNode<T>
     {
-        #region Fields
+         #region Fields
 
-        protected T _value;
-        protected TreeNode<T> _parent;
-        protected List<TreeNode<T>> _children;
+         T _value;
+         MinimaxTreeNode<T> _parent;
+         List<MinimaxTreeNode<T>> _children;
+         private int minimaxScore = 0;
         
         #endregion
 
         #region Constructors
 
-        public TreeNode(T value, TreeNode<T> parent)
+        public MinimaxTreeNode(T value, MinimaxTreeNode<T> parent)
         {
             _value = value;
             _parent = parent;
-            _children = new List<TreeNode<T>>();
+            _children = new List<MinimaxTreeNode<T>>();
         }
         
         #endregion
@@ -27,19 +30,25 @@ namespace Trees
 
         public T Value => _value;
 
-        public TreeNode<T> Parent
+        public MinimaxTreeNode<T> Parent
         {
             get { return _parent; }
             set { _parent = value; }
         }
 
-        public IList<TreeNode<T>> Children => _children.AsReadOnly();
+        public IList<MinimaxTreeNode<T>> Children => _children.AsReadOnly();
+
+        public int MinimaxScore
+        {
+            get { return minimaxScore; }
+            set { minimaxScore = value; }
+        }
 
         #endregion
 
         #region Methods
 
-        public bool AddChild(TreeNode<T> child)
+        public bool AddChild(MinimaxTreeNode<T> child)
         {
             if (_children.Contains(child) || this == child)
             {
@@ -53,7 +62,7 @@ namespace Trees
             }
         }
 
-        public bool RemoveChild(TreeNode<T> child)
+        public bool RemoveChild(MinimaxTreeNode<T> child)
         {
             if (_children.Contains(child))
             {
@@ -107,10 +116,4 @@ namespace Trees
         #endregion
 
     }
-    
-    
-    
-    
-    
 }
-
